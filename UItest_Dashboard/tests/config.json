@@ -2,8 +2,8 @@
   "linkedin": {
       "base_url": "https://www.linkedin.com/authwall?trk=ripf&trkInfo=AQFsHc8VB2zElwAAAXnh3M6YEzgUN2ssCjkVBNt9klqnA9DKMEPJoXAztFCSG_IVBmdZcwssrUnCnL25ReUw1PuhodS9EhwJYJv8MgmKvrZYBGukZpqFc_bsCk34ZgbN6zsHNZk=&originalReferer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Flinked-com",
       "driver": "chrome",
-      "user": "rajatstut@yahoo.com",
-      "password": "Snow_blindz1278!"
+      "user": "",
+      "password": ""
   }
 
 }
