@@ -22,6 +22,7 @@ def test_basicFunctionality(ptest_driver):
     homePage.click_Posted_Jobs()
     jobpage = JobPage(ptest_driver)
     jobpage.click_first_posted_job()
+    #jobpage.click_ratings_Button()
     # candidate_details = {}
     # candidate_details = jobpage.fetching_candidates_details()
     candidate_details = jobpage.fetch_candidate_details()

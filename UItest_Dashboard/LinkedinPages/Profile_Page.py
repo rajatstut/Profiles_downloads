@@ -27,6 +27,13 @@ class JobPage():
         time.sleep(5)
         self.driver.find_element_by_xpath("//h3[contains(text(),'Posted Jobs')]/../ul/li").click()
 
+    # def click_ratings_Button(self):
+    #     logging.info("Choosing Good fit option..")
+    #     time.sleep(6)
+    #     self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span").click()
+    #     self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../../div").click()
+
+
     def export_data_to_excel(self, employee_dict):
         now = str(datetime.datetime.now())[:19]
         now = now.replace(":", "_")
@@ -42,6 +49,7 @@ class JobPage():
         
     def fetch_candidate_details(self):
         logging.info("Extracting candidates details ..")
+        time.sleep(8)
         self.driver.find_element_by_xpath("//h4/span[text()='Messaging']").click()
         candidate_dictionary = defaultdict(list)        
         pages = self.driver.find_elements_by_xpath("//li[contains(@class,'artdeco-pagination__indicator')]")
@@ -62,16 +70,22 @@ class JobPage():
                             EC.presence_of_element_located((By.XPATH, "//button/span[text()='Good fit']"))
                         )
                         rate_as_validation_check = element.text
-                        if "Maybe" in rate_as_validation_check:
+                        if "Good fit" in rate_as_validation_check:
+                            # self.driver.find_element_by_xpath(
+                            # "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]//span[1]").click()
                             self.driver.find_element_by_xpath(
-                            "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]//span[1]").click()
+                                "//*[@data-control-name='hiring_applicant_message']/../div[3]//span").click()
                             time.sleep(3)
-                            emp_details = self.driver.find_element_by_xpath(
-                            "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]/div").text
-                            candidate_details_list = str(
-                            emp_details).split("\n")
-                            candidate_dictionary['EmailId'].append(candidate_details_list[2])
-                            candidate_dictionary['PhoneNumber'].append(candidate_details_list[5])
+                            # emp_details = self.driver.find_element_by_xpath(
+                            # "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]/div").text
+                            emp_details_email = self.driver.find_element_by_xpath(
+                                 "//div[@class='artdeco-dropdown__content-inner']/ul/li[2]/a/div/span[2]").text
+                            emp_details_phone = self.driver.find_element_by_xpath(
+                                " //div[@class='artdeco-dropdown__content-inner']/ul/li[3]/div/div/span[2]").text
+                            # candidate_details_list = str(
+                            # emp_details).split("\n")
+                            candidate_dictionary['EmailId'].append(emp_details_email)
+                            candidate_dictionary['PhoneNumber'].append(emp_details_phone)
                             time.sleep(3)
                             try:                            
                                 ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath("//a[text()='Download']")).perform()

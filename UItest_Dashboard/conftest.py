@@ -35,7 +35,7 @@ def pytest_runtest_setup():
                  "directory_upgrade": True}
         chrome_options.add_experimental_option("prefs", prefs)
         driver = webdriver.Chrome(options=chrome_options, executable_path="../../driver_path/chromedriver.exe")
-        driver.implicitly_wait(30)
+        #driver.implicitly_wait(30)
         print("Chrome browser selected..")
     elif config["connect"]["driver"] == "firefox":
         driver = webdriver.Firefox()
