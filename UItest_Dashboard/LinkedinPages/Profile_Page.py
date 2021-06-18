@@ -10,6 +10,10 @@ import logging
 from collections import defaultdict
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 class JobPage():
     filename = os.path.abspath('../../UItest_Dashboard/Automation_Results/report.log.')
@@ -54,8 +58,11 @@ class JobPage():
                     candidate.click()
                     time.sleep(1)
                     try:
-                        rate_as_validation_check = self.driver.find_element_by_xpath("//button[@data-control-name='hiring_applicant_rate']/span").text                       
-                        if "Good fit" in rate_as_validation_check:
+                        element = WebDriverWait(self.driver, 5).until(
+                            EC.presence_of_element_located((By.XPATH, "//button/span[text()='Good fit']"))
+                        )
+                        rate_as_validation_check = element.text
+                        if "Maybe" in rate_as_validation_check:
                             self.driver.find_element_by_xpath(
                             "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]//span[1]").click()
                             time.sleep(3)
@@ -66,7 +73,6 @@ class JobPage():
                             candidate_dictionary['EmailId'].append(candidate_details_list[2])
                             candidate_dictionary['PhoneNumber'].append(candidate_details_list[5])
                             time.sleep(3)
-                            
                             try:                            
                                 ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
                                 self.driver.find_element_by_xpath("//a[text()='Download']").click()    
