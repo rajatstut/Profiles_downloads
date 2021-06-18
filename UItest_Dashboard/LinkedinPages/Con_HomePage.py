@@ -29,7 +29,7 @@ class HomePage():
     def click_Jobs(self):
         logging.info("Clicking Jobs button")
         time.sleep(3)
-        self.driver.find_element_by_xpath("//*[@id= 'primary-navigation']/ul/li[3]").click()
+        self.driver.find_element_by_xpath("//*[@id= 'primary-navigation']/../ul/li[3]").click()
 
     def click_My_Jobs(self):
         logging.info("Clicking My Jobs..")
