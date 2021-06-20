@@ -27,11 +27,18 @@ class JobPage():
         time.sleep(5)
         self.driver.find_element_by_xpath("//h3[contains(text(),'Posted Jobs')]/../ul/li").click()
 
-    # def click_ratings_Button(self):
-    #     logging.info("Choosing Good fit option..")
-    #     time.sleep(6)
-    #     self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span").click()
-    #     self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../../div").click()
+    def click_ratings_Button(self):
+        logging.info("Choosing Good fit option..")
+        time.sleep(3)
+        self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']").click()
+        time.sleep(4)
+        self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../..//li[1]").click()
+        time.sleep(2)
+        self.driver.find_element_by_xpath(
+            "//*[@data-control-name='rating_facet_toggle']/span/../..//li[3]").click()
+        time.sleep(2)
+        self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../..//div//button[@data-control-name='rating_facet_toggle_show_results']").click()
+        time.sleep(2)
 
 
     def export_data_to_excel(self, employee_dict):
@@ -51,62 +58,107 @@ class JobPage():
         logging.info("Extracting candidates details ..")
         time.sleep(8)
         self.driver.find_element_by_xpath("//h4/span[text()='Messaging']").click()
-        candidate_dictionary = defaultdict(list)        
-        pages = self.driver.find_elements_by_xpath("//li[contains(@class,'artdeco-pagination__indicator')]")
-        totalpages = len(pages)+2
-        logging.info("Total Pages are :"+str(totalpages))        
-        try:  
-            for page in range(2,totalpages):
-                #self.driver.refresh()
-                vars = 0
-                vare = 100
-                for index in range(1,26) :
-                    candidate = self.driver.find_element_by_xpath('//li[contains(@class,"hiring-applicants__list-item")]['+str(index)+']')
-                    ActionChains(self.driver).move_to_element(candidate).perform()
-                    candidate.click()
-                    time.sleep(1)
-                    try:
-                        element = WebDriverWait(self.driver, 5).until(
-                            EC.presence_of_element_located((By.XPATH, "//button/span[text()='Good fit']"))
-                        )
-                        rate_as_validation_check = element.text
-                        if "Good fit" in rate_as_validation_check:
-                            # self.driver.find_element_by_xpath(
-                            # "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]//span[1]").click()
+        candidate_dictionary = defaultdict(list)
+        if self.driver.find_elements_by_xpath("//li[contains(@class,'artdeco-pagination__indicator')]"):
+            pages = self.driver.find_elements_by_xpath("//li[contains(@class,'artdeco-pagination__indicator')]")
+            totalpages = len(pages)+2
+            logging.info("Total Pages are :"+str(totalpages))
+            try:
+                for page in range(2,totalpages):
+                    #self.driver.refresh()
+                    vars = 0
+                    vare = 100
+                    for index in range(1,26) :
+                        candidate = self.driver.find_element_by_xpath('//li[contains(@class,"hiring-applicants__list-item")]['+str(index)+']')
+                        ActionChains(self.driver).move_to_element(candidate).perform()
+                        candidate.click()
+                        time.sleep(1)
+                        try:
+                            element = WebDriverWait(self.driver, 5).until(
+                                EC.presence_of_element_located((By.XPATH, "//button/span[text()='Good fit']"))
+                            )
+                            rate_as_validation_check = element.text
+                            if "Good fit" in rate_as_validation_check:
+                                self.driver.find_element_by_xpath(
+                                    "//*[@data-control-name='hiring_applicant_message']/../div[3]//span").click()
+                                time.sleep(3)
+                                emp_details_email = self.driver.find_element_by_xpath(
+                                     "//div[@class='artdeco-dropdown__content-inner']/ul/li[2]/a/div/span[2]").text
+                                emp_details_phone = self.driver.find_element_by_xpath(
+                                    " //div[@class='artdeco-dropdown__content-inner']/ul/li[3]/div/div/span[2]").text
+                                candidate_dictionary['EmailId'].append(emp_details_email)
+                                candidate_dictionary['PhoneNumber'].append(emp_details_phone)
+                                time.sleep(3)
+                                try:
+                                    ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
+                                    self.driver.find_element_by_xpath("//a[text()='Download']").click()
+                                except Exception as e:
+                                    ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]')).perform()
+                                    self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]').click()
+                                time.sleep(3)
+
+                        except Exception as e:
+                            logging.error(str(e))
+                        script = "window.scrollTo("+ str(vars) +","+ str(vare) + ")"
+                        self.driver.execute_script(script)
+
+                        vars = int(vars)+100
+                        vare = int(vare)+100
+
+                    self.driver.find_element_by_xpath("//button[@aria-label='Page "+str(page)+"']").click()
+                    time.sleep(5)
+            except Exception as e:
+                logging.error(str(e))
+        else:
+            vars = 0
+            vare = 100
+            for index in range(1, 26):
+                candidate = self.driver.find_element_by_xpath(
+                    '//li[contains(@class,"hiring-applicants__list-item")][' + str(index) + ']')
+                ActionChains(self.driver).move_to_element(candidate).perform()
+                candidate.click()
+                time.sleep(1)
+                try:
+                    element = WebDriverWait(self.driver, 5).until(
+                        EC.presence_of_element_located((By.XPATH, "//button/span[text()='Good fit']"))
+                    )
+                    rate_as_validation_check = element.text
+                    if "Good fit" in rate_as_validation_check:
+
+                        self.driver.find_element_by_xpath(
+                            "//*[@data-control-name='hiring_applicant_message']/../div[3]//span").click()
+                        time.sleep(3)
+                        emp_details_email = self.driver.find_element_by_xpath(
+                            "//div[@class='artdeco-dropdown__content-inner']/ul/li[2]/a/div/span[2]").text
+                        emp_details_phone = self.driver.find_element_by_xpath(
+                            " //div[@class='artdeco-dropdown__content-inner']/ul/li[3]/div/div/span[2]").text
+                        candidate_dictionary['EmailId'].append(emp_details_email)
+                        candidate_dictionary['PhoneNumber'].append(emp_details_phone)
+                        time.sleep(3)
+                        try:
+                            ActionChains(self.driver).move_to_element(
+                                self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
+                            self.driver.find_element_by_xpath("//a[text()='Download']").click()
+                        except Exception as e:
+                            ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath(
+                                '//a[contains(@class,"ui-attachment__download-button")]')).perform()
                             self.driver.find_element_by_xpath(
-                                "//*[@data-control-name='hiring_applicant_message']/../div[3]//span").click()
-                            time.sleep(3)
-                            # emp_details = self.driver.find_element_by_xpath(
-                            # "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]/div").text
-                            emp_details_email = self.driver.find_element_by_xpath(
-                                 "//div[@class='artdeco-dropdown__content-inner']/ul/li[2]/a/div/span[2]").text
-                            emp_details_phone = self.driver.find_element_by_xpath(
-                                " //div[@class='artdeco-dropdown__content-inner']/ul/li[3]/div/div/span[2]").text
-                            # candidate_details_list = str(
-                            # emp_details).split("\n")
-                            candidate_dictionary['EmailId'].append(emp_details_email)
-                            candidate_dictionary['PhoneNumber'].append(emp_details_phone)
-                            time.sleep(3)
-                            try:                            
-                                ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
-                                self.driver.find_element_by_xpath("//a[text()='Download']").click()    
-                            except Exception as e:                                            
-                                ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]')).perform()
-                                self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]').click()
-                            time.sleep(3)
-                    except Exception as e:
-                        logging.error(str(e))
-                    script = "window.scrollTo("+ str(vars) +","+ str(vare) + ")"
-                    self.driver.execute_script(script)
-                                                        
-                    vars = int(vars)+100
-                    vare = int(vare)+100
-            
-                self.driver.find_element_by_xpath("//button[@aria-label='Page "+str(page)+"']").click()
+                                '//a[contains(@class,"ui-attachment__download-button")]').click()
+                        time.sleep(3)
+
+                except Exception as e:
+                    logging.error(str(e))
+                script = "window.scrollTo(" + str(vars) + "," + str(vare) + ")"
+                self.driver.execute_script(script)
+
+                vars = int(vars) + 100
+                vare = int(vare) + 100
+
+                #self.driver.find_element_by_xpath("//button[@aria-label='Page " + str(page) + "']").click()
                 time.sleep(5)
-        except Exception as e:
-            logging.error(str(e))
-        
+            # except Exception as e:
+            #    logging.error(str(e))
+
         return candidate_dictionary
 
 
