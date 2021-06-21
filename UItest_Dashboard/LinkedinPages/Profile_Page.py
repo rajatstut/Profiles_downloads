@@ -29,7 +29,7 @@ class JobPage():
 
     def click_ratings_Button(self):
         logging.info("Choosing Good fit option..")
-        time.sleep(3)
+        time.sleep(6)
         self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']").click()
         time.sleep(4)
         self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../..//li[1]").click()
