@@ -40,7 +40,6 @@ class JobPage():
         self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../..//div//button[@data-control-name='rating_facet_toggle_show_results']").click()
         time.sleep(2)
 
-
     def export_data_to_excel(self, employee_dict):
         now = str(datetime.datetime.now())[:19]
         now = now.replace(":", "_")

@@ -31,7 +31,6 @@ class HomePage():
         time.sleep(7)
         self.driver.find_element_by_xpath("//*[@id= 'primary-navigation']/../ul/li[3]").click()
 
-
     def click_My_Jobs(self):
         logging.info("Clicking My Jobs..")
         time.sleep(7)
