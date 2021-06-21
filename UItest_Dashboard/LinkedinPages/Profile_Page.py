@@ -111,7 +111,10 @@ class JobPage():
         else:
             vars = 0
             vare = 100
-            for index in range(1, 26):
+            no_of_applicants = self.driver.find_element_by_xpath("//div[@class='hiring-applicants__left-column ']//span").text
+            no_of_applicants = str(no_of_applicants).split("(")
+            no_of_applicant=int(((no_of_applicants[0:2])[1].split(" "))[0])
+            for index in range(1, no_of_applicant+1):
                 candidate = self.driver.find_element_by_xpath(
                     '//li[contains(@class,"hiring-applicants__list-item")][' + str(index) + ']')
                 ActionChains(self.driver).move_to_element(candidate).perform()
