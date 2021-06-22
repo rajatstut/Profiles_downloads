@@ -18,7 +18,7 @@ def pytest_runtest_setup():
     with open('config.json', 'r') as data:
         config = json.load(data)
     ver1 = getBrowserVesionWindows()
-    ver2 = getChromeDriverVesionWindows()
+    getChromeDriverVesionWindows()
     killProcess("windows")
     downloadChromeDriverZip(ver1, script_dir, "windows")
 

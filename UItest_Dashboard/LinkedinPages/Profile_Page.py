@@ -85,6 +85,9 @@ class JobPage():
                                      "//div[@class='artdeco-dropdown__content-inner']/ul/li[2]/a/div/span[2]").text
                                 emp_details_phone = self.driver.find_element_by_xpath(
                                     " //div[@class='artdeco-dropdown__content-inner']/ul/li[3]/div/div/span[2]").text
+                                emp_details_name =self.driver.find_element_by_xpath("//*[@class='ph5 pt5 pb3 display-flex justify-space-between']//h1").text
+                                emp_details_name =(emp_details_name.split(" application"))
+                                candidate_dictionary['Name'].append((emp_details_name[0])[:-2])
                                 candidate_dictionary['EmailId'].append(emp_details_email)
                                 candidate_dictionary['PhoneNumber'].append(emp_details_phone)
                                 time.sleep(3)
@@ -126,7 +129,6 @@ class JobPage():
                     )
                     rate_as_validation_check = element.text
                     if "Good fit" in rate_as_validation_check:
-
                         self.driver.find_element_by_xpath(
                             "//*[@data-control-name='hiring_applicant_message']/../div[3]//span").click()
                         time.sleep(3)
@@ -134,6 +136,10 @@ class JobPage():
                             "//div[@class='artdeco-dropdown__content-inner']/ul/li[2]/a/div/span[2]").text
                         emp_details_phone = self.driver.find_element_by_xpath(
                             " //div[@class='artdeco-dropdown__content-inner']/ul/li[3]/div/div/span[2]").text
+                        emp_details_name = self.driver.find_element_by_xpath(
+                            "//*[@class='ph5 pt5 pb3 display-flex justify-space-between']//h1").text
+                        emp_details_name = emp_details_name.split(" application")
+                        candidate_dictionary['Name'].append((emp_details_name[0])[:-2])
                         candidate_dictionary['EmailId'].append(emp_details_email)
                         candidate_dictionary['PhoneNumber'].append(emp_details_phone)
                         time.sleep(3)
@@ -164,36 +170,6 @@ class JobPage():
         return candidate_dictionary
 
 
-    def fetching_candidates_details(self):
-        logging.info("Extracting candidates details ..")        
-        candidate_dictionary = defaultdict(list)
-        time.sleep(3)
-        self.driver.maximize_window()
-        self.driver.find_element_by_xpath(
-            "//*[@class='msg-overlay-bubble-header__controls display-flex']//*[@type='chevron-down-icon']").click()
-        time.sleep(3)
-        list_candidates = self.driver.find_element_by_xpath("//*[@class='hiring-applicants__list-container']/ul")
-        count_of_child = len(list_candidates.find_elements_by_xpath("./li"))
-        for i in range(1,count_of_child):
-            self.driver.find_element_by_xpath(
-                "//ul[@class='artdeco-list']/li[%d]" % (i,)).click()
-            rate_as_validation_check= self.driver.find_element_by_xpath("//*[@data-control-name='hiring_applicant_rate']//span").text
-            if "Good fit" in rate_as_validation_check:
-                try:
-                    time.sleep(3)
-                    self.driver.find_element_by_xpath(
-                        "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]//span[1]").click()
-                    emp_details = self.driver.find_element_by_xpath(
-                        "//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]/div").text
-                    candidate_details_list = str(
-                        emp_details).split("\n")
-                    candidate_dictionary['EmailId'].append(candidate_details_list[2])
-                    candidate_dictionary['PhoneNumber'].append(candidate_details_list[5])
-                    #url =self.driver.current_url
-                    self.fetch_data_from_profile()
-                except IndexError:
-                    print("Handling Index error")
-        return candidate_dictionary
 
 
     def fetch_data_from_profile(self):

@@ -49,17 +49,21 @@ def getBrowserVesionWindows():
 
 
 def getChromeDriverVesionWindows():
-    script_dir = os.path.dirname(__file__)
-    script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
-    script_dir = script_dir + "/driver_path" + "/chromedriver.exe"
-    cmd = script_dir + ' -v'
-    proc = subprocess.Popen(
-        cmd,
-        shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    stdout, stderr = proc.communicate()
-    version = str(stdout.strip())
-    finalversion = version.split(" ")        
-    return finalversion[1]
+    try:
+        script_dir = os.path.dirname(__file__)
+        script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
+        script_dir = script_dir + "/driver_path" + "/chromedriver.exe"
+        cmd = script_dir + ' -v'
+        proc = subprocess.Popen(
+            cmd,
+            shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        stdout, stderr = proc.communicate()
+        version = str(stdout.strip())
+        finalversion = version.split(" ")
+        return finalversion[1]
+    except IndexError:
+        print("handing index error..")
+
 
 def createDriver(exepath,downloaddir):
     options = webdriver.ChromeOptions()
