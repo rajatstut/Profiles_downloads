@@ -7,6 +7,7 @@ from UItest_Dashboard.LinkedinPages.Con_HomePage import HomePage
 from UItest_Dashboard.LinkedinPages.Profile_Page import JobPage
 import json
 
+from utils.update_chromedriver import getBrowserVesionWindows, getChromeDriverVesionWindows, downloadChromeDriverZip
 
 
 def test_basicFunctionality(ptest_driver):

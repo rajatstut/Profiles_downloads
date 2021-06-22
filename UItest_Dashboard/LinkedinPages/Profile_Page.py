@@ -31,7 +31,7 @@ class JobPage():
         logging.info("Choosing Good fit option..")
         time.sleep(6)
         self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']").click()
-        time.sleep(4)
+        time.sleep(6)
         self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../..//li[1]").click()
         time.sleep(2)
         self.driver.find_element_by_xpath(
@@ -113,8 +113,8 @@ class JobPage():
             vare = 100
             no_of_applicants = self.driver.find_element_by_xpath("//div[@class='hiring-applicants__left-column ']//span").text
             no_of_applicants = str(no_of_applicants).split("(")
-            no_of_applicant=int(((no_of_applicants[0:2])[1].split(" "))[0])
-            for index in range(1, no_of_applicant+1):
+            no_of_applicants=int(((no_of_applicants[0:2])[1].split(" "))[0])
+            for index in range(1, no_of_applicants+1):
                 candidate = self.driver.find_element_by_xpath(
                     '//li[contains(@class,"hiring-applicants__list-item")][' + str(index) + ']')
                 ActionChains(self.driver).move_to_element(candidate).perform()

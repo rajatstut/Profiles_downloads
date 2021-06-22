@@ -48,8 +48,11 @@ def getBrowserVesionWindows():
     return finalversion
 
 
-def getChromeDriverVesionWindows(driverpath):
-    cmd = driverpath + ' -v'
+def getChromeDriverVesionWindows():
+    script_dir = os.path.dirname(__file__)
+    script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
+    script_dir = script_dir + "/driver_path" + "/chromedriver.exe"
+    cmd = script_dir + ' -v'
     proc = subprocess.Popen(
         cmd,
         shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -83,7 +86,7 @@ def downloadChromeDriverZip(browserversion,driverdirpath,platform):
 
     for file in os.listdir(driverdirpath):
         if file == "chromedriver.zip":            
-            zippath = driverdirpath + str("//") + file
+            zippath = driverdirpath + str("/") + file
 
     print("zip file path : ", zippath)
     with zipfile.ZipFile(zippath, 'r') as zip_ref:
@@ -99,7 +102,7 @@ def killProcess(platform):
         os.system("killall chrome")
     else:
         os.system("taskkill /IM chromedriver.exe /f")
-        os.system("taskkill /IM chrome.exe /f")
+        #os.system("taskkill /IM chrome.exe /f")
 
 
 def copyAndRemoveExe(copyfrompath,copytopath):

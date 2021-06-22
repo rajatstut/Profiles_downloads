@@ -6,9 +6,21 @@ from selenium.webdriver.chrome.options import Options
 import json
 import pytest
 
+from utils.update_chromedriver import getBrowserVesionWindows, getChromeDriverVesionWindows, downloadChromeDriverZip, \
+    killProcess
 
 
 def pytest_runtest_setup():
+    script_dir = os.path.dirname(__file__)
+    script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/").replace("/UItest_Dashboard",
+                                                                                                 "")
+    script_dir = script_dir + "/driver_path"
+    with open('config.json', 'r') as data:
+        config = json.load(data)
+    ver1 = getBrowserVesionWindows()
+    ver2 = getChromeDriverVesionWindows()
+    killProcess("windows")
+    downloadChromeDriverZip(ver1, script_dir, "windows")
 
     '''
     Set up for each test case pre-execution
