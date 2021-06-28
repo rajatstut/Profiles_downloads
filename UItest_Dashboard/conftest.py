@@ -11,6 +11,7 @@ from utils.update_chromedriver import getBrowserVesionWindows, getChromeDriverVe
 
 
 def pytest_runtest_setup():
+    removing_file_previous_run()
     script_dir = os.path.dirname(__file__)
     script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/").replace("/UItest_Dashboard",
                                                                                                  "")
@@ -62,27 +63,11 @@ def pytest_runtest_setup():
     assert config["linkedin"]["base_url"] in driver.current_url
     return driver
 
-@pytest.fixture(scope='session')
+#@pytest.fixture(scope='session')
 def removing_file_previous_run():
     script_dir = os.path.dirname(__file__)
     script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
-    script_dir = script_dir + '/Automation_Results'
-    files = os.listdir(script_dir)
-    for file in files:
-        if file.endswith(".pdf"):
-            os.remove(script_dir + '/' + file)
-            print("File Removed!")
-        if file.endswith(".xlsx"):
-            os.remove(script_dir + '/' + file)
-            print("File Removed!")
-        else:
-            pass
-
-@pytest.fixture(scope='session')
-def removing_file_previous_run():
-    script_dir = os.path.dirname(__file__)
-    script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
-    script_dir = script_dir + '/Automation_Results'
+    script_dir = script_dir + '/UItest_Dashboard/Automation_Results/'
     files = os.listdir(script_dir)
     for file in files:
         if file.endswith(".pdf"):
@@ -94,8 +79,33 @@ def removing_file_previous_run():
         if file.endswith(".docx"):
             os.remove(script_dir + '/' + file)
             print("File Removed!")
+        if file.endswith(".doc"):
+            os.remove(script_dir + '/' + file)
+            print("File Removed!")
         else:
             pass
+
+# @pytest.fixture(scope='session')
+# def removing_file_previous_run():
+#     script_dir = os.path.dirname(__file__)
+#     script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
+#     script_dir = script_dir + '/Automation_Results'
+#     files = os.listdir(script_dir)
+#     for file in files:
+#         if file.endswith(".pdf"):
+#             os.remove(script_dir + '/' + file)
+#             print("File Removed!")
+#         if file.endswith(".xlsx"):
+#             os.remove(script_dir + '/' + file)
+#             print("File Removed!")
+#         if file.endswith(".docx"):
+#             os.remove(script_dir + '/' + file)
+#             print("File Removed!")
+#         if file.endswith(".doc"):
+#             os.remove(script_dir + '/' + file)
+#             print("File Removed!")
+#         else:
+#             pass
 
 @pytest.fixture(scope='session', autouse=True)
 def ptest_driver():
