@@ -22,7 +22,6 @@ def pytest_runtest_setup():
     getChromeDriverVesionWindows()
     killProcess("windows")
     downloadChromeDriverZip(ver1, script_dir, "windows")
-
     '''
     Set up for each test case pre-execution
     '''
