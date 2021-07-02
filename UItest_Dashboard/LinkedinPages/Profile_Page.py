@@ -114,7 +114,7 @@ class JobPage():
         else:
             vars = 0
             vare = 100
-            no_of_applicants = self.driver.find_element_by_xpath("//div[@class='hiring-applicants__left-column ']//span").text
+            no_of_applicants = self.driver.find_element_by_xpath("//div[@class='hiring-applicants__content']//span").text
             no_of_applicants = str(no_of_applicants).split("(")
             no_of_applicants=int(((no_of_applicants[0:2])[1].split(" "))[0])
             for index in range(1, no_of_applicants+1):

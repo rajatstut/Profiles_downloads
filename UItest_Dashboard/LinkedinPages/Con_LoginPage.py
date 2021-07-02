@@ -41,7 +41,7 @@ class LoginPage():
 
     def click_sign_in(self,driver):
         logging.info("clicking sign-in button")
-        time.sleep(3)
+        time.sleep(10)
         self.driver.find_element(by=LocatorsPage.button_signin[0], value = LocatorsPage.button_signin[1]).click()
         logging.info("sign-in button clicked")
 
