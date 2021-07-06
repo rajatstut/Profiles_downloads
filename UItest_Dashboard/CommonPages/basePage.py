@@ -18,7 +18,7 @@ class BasePage(object):
 
     with open('../../UItest_Dashboard/tests/config.json') as data:
         config = json.load(data)
-    base_url = config["linkedin"]["base_url"]
+    base_url = config["ats"]["base_url"]
 
     def current_url(self):
         '''
