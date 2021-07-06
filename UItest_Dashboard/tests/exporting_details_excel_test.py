@@ -16,6 +16,7 @@ def test_basicFunctionality(ptest_driver):
     with open('config.json', 'r') as data:
         config = json.load(data)
     loginPage = LoginPage(ptest_driver)
+
     loginPage.removing_file_previous_run()
     loginPage.click_sign_in(ptest_driver)
     loginPage.send_credentials(config["linkedin"]["user"], config["linkedin"]["password"])

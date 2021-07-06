@@ -38,7 +38,8 @@ class ATS_HomePage():
         with open('config.json', 'r') as data:
             config = json.load(data)
         self.driver.find_element_by_xpath("//*[@name='reqnumber']").send_keys(config["ats"]["requisition_ID"])
-        self.driver.find_element_by_xpath("//*[@class='buttonset activeAccessible fioriBtn active']//button").click()
+        time.sleep(3)
+        self.driver.find_element_by_xpath("//*[@class='activeAccessible fioriBtn active']//button").click()
         time.sleep(5)
 
     def referring_friend(self):
@@ -56,10 +57,15 @@ class ATS_HomePage():
             select = Select(self.driver.find_element_by_xpath("//*[@class='sfCascadingPicklist']/select"))
             select.select_by_visible_text("India")
             logging.info("Country selected")
-            files_details = next(walk("D:/local_repo/Profiles_downloads/UItest_Dashboard/Automation_Results/"), (None, None, []))[2]
-            if str(files_details).endswith(".pdf") | str(files_details).endswith(".doc") | str(files_details).endswith(".docx"):
-                self.driver.find_element_by_xpath("//*[@name = 'fileData1']").send_keys("D:/local_repo/Profiles_downloads/UItest_Dashboard/Automation_Results")
-
+            script_dir = os.path.dirname(__file__)
+            script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
+            script_dir = script_dir + "/Automation_results"
+            files_details = next(walk(script_dir), (None, None, []))[2]
+            for j in range(len(files_details)):
+                if str(files_details[j]).endswith(".pdf") | str(files_details[j]).endswith(".doc") | str(files_details[j]).endswith(".docx"):
+                    self.driver.find_element_by_xpath("//*[@name = 'fileData1']").send_keys(script_dir+ "/"+ files_details[j])
+                else:
+                    print("")
 
     def check_login(self):
         logging.info("Validating url..")
