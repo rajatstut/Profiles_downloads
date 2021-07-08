@@ -2,11 +2,15 @@ import os
 import time
 import glob
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.wait import WebDriverWait
 from UItest_Dashboard.CommonPages.basePage import BasePage
 import json
 import pytest
 from UItest_Dashboard.AtsPages.Locators import LocatorsPage
 import logging
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from os import walk
 
 class ATS_HomePage():
@@ -43,12 +47,15 @@ class ATS_HomePage():
         time.sleep(5)
 
     def referring_friend(self):
-        self.driver.find_element_by_xpath("//*[@class='sfContextualMenu globalPortletLinkTextColor']/*[contains(text(),'Select Action')]").click()
+        element = WebDriverWait(self.driver, 5).until(
+                                EC.presence_of_element_located((By.XPATH, "//*[@class='sfContextualMenu globalPortletLinkTextColor']/*[contains(text(),'Select Action')]"))
+                            )
+        element.click()
         self.driver.find_element_by_xpath("//*[@class='sf-PopMenu']/li[4]").click()
         time.sleep(3)
 
     def referral_details(self, candidate_details):
-        for i in range(len(candidate_details)):
+        for i in range(len(candidate_details)-1):
             self.referring_friend()
             cand_name = str(candidate_details['Name'][i]).split(" ")
             self.driver.find_element_by_xpath("//*[@title = 'First Name']").send_keys(cand_name[0])
@@ -62,14 +69,15 @@ class ATS_HomePage():
             script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
             script_dir = script_dir + "/Automation_results"
             files_details = next(walk(script_dir), (None, None, []))[2]
-            for j in range(len(files_details)):
-                # if str(files_details[j]).endswith(".pdf") | str(files_details[j]).endswith(".doc") | str(files_details[j]).endswith(".docx"):
+            for j in range(len(files_details)):                
                 if cand_name[1] in str(files_details[j]) :
                     self.driver.find_element_by_xpath("//*[@name = 'fileData1']").send_keys(script_dir+ "/"+ files_details[j])
                 else:
                     print("")
-            time.sleep(4)
-            self.driver.find_element_by_xpath("//button[text()='Cancel']").click()
+            
+            self.driver.find_element_by_xpath("//span[contains(@class,'sfDialogBoxButtonWrapper')]//button[text()='Send']").click()            
+            time.sleep(2)
+            self.driver.find_element_by_xpath("//button[text()='Cancel']").click()            
             
     
     
