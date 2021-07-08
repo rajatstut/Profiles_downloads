@@ -37,7 +37,7 @@ def test_basicFunctionality(ptest_driver):
     ats_homePage.click_Home_button()
     ats_homePage.click_careers_option()
     ats_homePage.searching_job()
-    ats_homePage.referring_friend()
+    # ats_homePage.referring_friend()
     ats_homePage.referral_details(candidate_details)
 
 

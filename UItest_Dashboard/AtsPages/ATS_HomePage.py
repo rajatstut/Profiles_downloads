@@ -49,6 +49,7 @@ class ATS_HomePage():
 
     def referral_details(self, candidate_details):
         for i in range(len(candidate_details)):
+            self.referring_friend()
             cand_name = str(candidate_details['Name'][i]).split(" ")
             self.driver.find_element_by_xpath("//*[@title = 'First Name']").send_keys(cand_name[0])
             self.driver.find_element_by_xpath("//*[@title = 'Last Name']").send_keys(cand_name[1])
@@ -62,11 +63,16 @@ class ATS_HomePage():
             script_dir = script_dir + "/Automation_results"
             files_details = next(walk(script_dir), (None, None, []))[2]
             for j in range(len(files_details)):
-                if str(files_details[j]).endswith(".pdf") | str(files_details[j]).endswith(".doc") | str(files_details[j]).endswith(".docx"):
+                # if str(files_details[j]).endswith(".pdf") | str(files_details[j]).endswith(".doc") | str(files_details[j]).endswith(".docx"):
+                if cand_name[1] in str(files_details[j]) :
                     self.driver.find_element_by_xpath("//*[@name = 'fileData1']").send_keys(script_dir+ "/"+ files_details[j])
                 else:
                     print("")
-
+            time.sleep(4)
+            self.driver.find_element_by_xpath("//button[text()='Cancel']").click()
+            
+    
+    
     def check_login(self):
         logging.info("Validating url..")
         assert self.con_url in self.driver.current_url

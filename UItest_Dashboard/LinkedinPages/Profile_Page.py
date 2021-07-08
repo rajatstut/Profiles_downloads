@@ -2,6 +2,7 @@ import os
 import tarfile
 import urllib
 import shutil
+import glob
 import datetime
 import requests
 from pandas import DataFrame, ExcelWriter
@@ -52,7 +53,35 @@ class JobPage():
         time.sleep(4)
         self.driver.find_element_by_xpath("//*[@data-control-name='hiring_applicant_rate']//span/../../../../div[3]//span[1]").click()
 
-        
+
+    def wait_for_downloads(self):
+        logging.info("Waiting for downloads")
+        time.sleep(3)
+        filespath = os.path.abspath('..//Automation_Results//')
+        list_of_files = glob.glob(filespath+"//*.crdownload")
+        while len(list_of_files) != 0 :
+            time.sleep(5)
+            list_of_files = glob.glob(filespath+"//*.crdownload")         
+
+
+
+    def rename_filename_with_candidate(self, filename):
+        filespath = os.path.abspath('..//Automation_Results//')
+                
+        list_of_files = glob.glob(filespath+"//*.pdf")
+        list_of_files.extend(glob.glob(filespath+"//*.docx"))
+        list_of_files.extend(glob.glob(filespath+"//*.doc"))
+        print(list_of_files)        
+        latest_file = max(list_of_files, key=os.path.getctime)
+        logging.info("file is: " +str(latest_file))      
+        if latest_file.endswith('.pdf'):  
+            os.rename(latest_file, filespath+"//"+filename+".pdf")
+        elif latest_file.endswith('.doc'): 
+            os.rename(latest_file, filespath+"//"+filename+".doc")
+        else:        
+            os.rename(latest_file, filespath+"//"+filename+".docx")
+
+
     def fetch_candidate_details(self):
         logging.info("Extracting candidates details ..")
         time.sleep(8)
@@ -94,9 +123,19 @@ class JobPage():
                                 try:
                                     ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
                                     self.driver.find_element_by_xpath("//a[text()='Download']").click()
+                                    self.wait_for_downloads()
+                                    cand_name = str(candidate_dictionary['Name'][index-1]).split(" ")                                    
+                                    newfilename = cand_name[0]+"_"+cand_name[1]
+                                    logging.info(newfilename)
+                                    self.rename_filename_with_candidate(newfilename)
                                 except Exception as e:
                                     ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]')).perform()
                                     self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]').click()
+                                    self.wait_for_downloads()
+                                    cand_name = str(candidate_dictionary['Name'][index-1]).split(" ")                                    
+                                    newfilename = cand_name[0]+"_"+cand_name[1]                                    
+                                    logging.info(newfilename)
+                                    self.rename_filename_with_candidate(newfilename)
                                 time.sleep(3)
 
                         except Exception as e:
@@ -147,11 +186,21 @@ class JobPage():
                             ActionChains(self.driver).move_to_element(
                                 self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
                             self.driver.find_element_by_xpath("//a[text()='Download']").click()
+                            self.wait_for_downloads()
+                            cand_name = str(candidate_dictionary['Name'][index-1]).split(" ")                            
+                            newfilename = cand_name[0]+"_"+cand_name[1]
+                            logging.info(newfilename)
+                            self.rename_filename_with_candidate(newfilename)
                         except Exception as e:
                             ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath(
                                 '//a[contains(@class,"ui-attachment__download-button")]')).perform()
                             self.driver.find_element_by_xpath(
                                 '//a[contains(@class,"ui-attachment__download-button")]').click()
+                            self.wait_for_downloads()
+                            cand_name = str(candidate_dictionary['Name'][index-1]).split(" ")
+                            newfilename = cand_name[0]+"_"+cand_name[1]
+                            logging.info(newfilename)
+                            self.rename_filename_with_candidate(newfilename)
                         time.sleep(3)
 
                 except Exception as e:
@@ -186,8 +235,9 @@ class JobPage():
 
 
 
-
-
+# obj = JobPage("driver")
+# obj.rename_filename_with_candidate("myfile.pdf")
+# obj.wait_for_downloads()
 
 
 
