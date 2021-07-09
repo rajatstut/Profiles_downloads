@@ -72,10 +72,10 @@ class ATS_HomePage():
             script_dir = script_dir + "/Automation_results"
             files_details = next(walk(script_dir), (None, None, []))[2]
             for j in range(len(files_details)):                
-                if cand_name[1] in str(files_details[j]) :
+                if cand_name[0] in str(files_details[j]) and cand_name[1] in str(files_details[j]) :
                     self.driver.find_element_by_xpath("//*[@name = 'fileData1']").send_keys(script_dir+ "/"+ files_details[j])
                 else:
-                    print("")
+                    print("Records can't be submitted")
             self.driver.find_element_by_xpath("//span[contains(@class,'sfDialogBoxButtonWrapper')]//button[text()='Send']").click()
             message = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.XPATH, "//*[@class='important-focus-msg']")))
