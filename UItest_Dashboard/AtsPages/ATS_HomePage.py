@@ -5,6 +5,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from UItest_Dashboard.CommonPages.basePage import BasePage
 import json
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import pytest
 from UItest_Dashboard.AtsPages.Locators import LocatorsPage
 import logging
@@ -47,7 +49,7 @@ class ATS_HomePage():
         time.sleep(5)
 
     def referring_friend(self):
-        element = WebDriverWait(self.driver, 5).until(
+        element = WebDriverWait(self.driver, 15).until(
                                 EC.presence_of_element_located((By.XPATH, "//*[@class='sfContextualMenu globalPortletLinkTextColor']/*[contains(text(),'Select Action')]"))
                             )
         element.click()
@@ -55,7 +57,7 @@ class ATS_HomePage():
         time.sleep(3)
 
     def referral_details(self, candidate_details):
-        for i in range(len(candidate_details)):
+        for i in range(len(candidate_details['Name'])):
             self.referring_friend()
             cand_name = str(candidate_details['Name'][i]).split(" ")
             self.driver.find_element_by_xpath("//*[@title = 'First Name']").send_keys(cand_name[0])
@@ -75,17 +77,13 @@ class ATS_HomePage():
                 else:
                     print("")
             self.driver.find_element_by_xpath("//span[contains(@class,'sfDialogBoxButtonWrapper')]//button[text()='Send']").click()
-            time.sleep(5)
-            message = self.driver.find_element_by_xpath("//*[@class='important-focus-msg']").text
-            if "submitted successfully" in message:
+            message = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//*[@class='important-focus-msg']")))
+            if "successfully" in message.text:
                 print ("Profile submitted")
+                time.sleep(4)
             else:
                 self.driver.find_element_by_xpath("//button[text()='Cancel']").click()
-
-
-
-
-    
     
     def check_login(self):
         logging.info("Validating url..")
