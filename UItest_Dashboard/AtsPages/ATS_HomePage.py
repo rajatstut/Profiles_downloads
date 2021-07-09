@@ -55,7 +55,7 @@ class ATS_HomePage():
         time.sleep(3)
 
     def referral_details(self, candidate_details):
-        for i in range(len(candidate_details)-1):
+        for i in range(len(candidate_details)):
             self.referring_friend()
             cand_name = str(candidate_details['Name'][i]).split(" ")
             self.driver.find_element_by_xpath("//*[@title = 'First Name']").send_keys(cand_name[0])
@@ -74,11 +74,17 @@ class ATS_HomePage():
                     self.driver.find_element_by_xpath("//*[@name = 'fileData1']").send_keys(script_dir+ "/"+ files_details[j])
                 else:
                     print("")
-            
-            self.driver.find_element_by_xpath("//span[contains(@class,'sfDialogBoxButtonWrapper')]//button[text()='Send']").click()            
-            time.sleep(2)
-            self.driver.find_element_by_xpath("//button[text()='Cancel']").click()            
-            
+            self.driver.find_element_by_xpath("//span[contains(@class,'sfDialogBoxButtonWrapper')]//button[text()='Send']").click()
+            time.sleep(5)
+            message = self.driver.find_element_by_xpath("//*[@class='important-focus-msg']").text
+            if "submitted successfully" in message:
+                print ("Profile submitted")
+            else:
+                self.driver.find_element_by_xpath("//button[text()='Cancel']").click()
+
+
+
+
     
     
     def check_login(self):

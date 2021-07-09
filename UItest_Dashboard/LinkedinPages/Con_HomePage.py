@@ -33,7 +33,7 @@ class HomePage():
 
     def click_My_Jobs(self):
         logging.info("Clicking My Jobs..")
-        time.sleep(7)
+        time.sleep(10)
         self.driver.find_element_by_xpath("//*[@href = 'https://www.linkedin.com/my-items/saved-jobs/']/span[1]").click()
 
     def click_Posted_Jobs(self):

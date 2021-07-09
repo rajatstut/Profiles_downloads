@@ -56,7 +56,7 @@ class ATS_LoginPage():
     def enter_companyID(self):
         logging.info("Entering company's id")
         self.driver.find_element_by_xpath("//*[@id = '__input0-inner']").send_keys("incedotech")
-        time.sleep(3)
+        time.sleep(8)
         self.driver.find_element_by_xpath("//*[@id ='__button0-inner']/span").click()
         time.sleep(2)
 
