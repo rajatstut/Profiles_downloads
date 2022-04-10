@@ -30,7 +30,7 @@ class ATS_HomePage():
         # self.con_url =driver.get(config["ats"]["base_url"])
 
     def click_Home_button(self):
-        time.sleep(5)
+        time.sleep(3)
         self.driver.find_element_by_xpath("//*[@id ='customHeaderModulePickerBtn-BDI-content']").click()
         logging.info("Home button clicked..")
 
@@ -52,7 +52,9 @@ class ATS_HomePage():
         element = WebDriverWait(self.driver, 15).until(
                                 EC.presence_of_element_located((By.XPATH, "//*[@class='sfContextualMenu globalPortletLinkTextColor']/*[contains(text(),'Select Action')]"))
                             )
+
         element.click()
+        time.sleep(2)
         self.driver.find_element_by_xpath("//*[@class='sf-PopMenu']/li[4]").click()
         time.sleep(3)
 
@@ -67,6 +69,7 @@ class ATS_HomePage():
             select = Select(self.driver.find_element_by_xpath("//*[@class='sfCascadingPicklist']/select"))
             select.select_by_visible_text("India")
             logging.info("Country selected")
+
             script_dir = os.path.dirname(__file__)
             script_dir = os.path.abspath(os.path.join(script_dir, os.pardir)).replace("\\", "/")
             script_dir = script_dir + "/Automation_results"
@@ -76,15 +79,27 @@ class ATS_HomePage():
                     self.driver.find_element_by_xpath("//*[@name = 'fileData1']").send_keys(script_dir+ "/"+ files_details[j])
                 else:
                     print("Records can't be submitted")
+
             self.driver.find_element_by_xpath("//span[contains(@class,'sfDialogBoxButtonWrapper')]//button[text()='Send']").click()
-            message = WebDriverWait(self.driver, 10).until(
+            time.sleep(2)
+            '''
+            message = WebDriverWait(self.driver, 15).until(
                 EC.presence_of_element_located((By.XPATH, "//*[@class='important-focus-msg']")))
-            if "successfully" in message.text:
-                print ("Profile submitted")
+            '''
+            try:
+                message = self.driver.find_element_by_xpath("//*[@class='panelContent globalPortletBody']").text
+            except:
+                print("Okay")
+            #if "successfully" in message.text:
+            if "exists" in message:
+                self.driver.find_element_by_xpath("//*[@class='buttonset sfDialogBoxButtonWrapper active']/span").click()
+                print ("Profile exists")
+                self.driver.find_element_by_xpath("//button[text()='Cancel']").click()
                 time.sleep(4)
             else:
                 self.driver.find_element_by_xpath("//button[text()='Cancel']").click()
-    
+                time.sleep(4)
+
     def check_login(self):
         logging.info("Validating url..")
         assert self.con_url in self.driver.current_url

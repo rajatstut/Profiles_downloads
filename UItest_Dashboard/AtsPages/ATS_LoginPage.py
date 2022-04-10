@@ -22,9 +22,6 @@ class ATS_LoginPage():
         self.con_url =driver.get(config["ats"]["base_url"])
 
     def ats_url(self):
-        with open('config.json', 'r') as data:
-            config = json.load(data)
-        #self.driver.get(config["ats"]["base_url"])
         self.driver.get("https://hcm44.sapsf.com/login#/login")
 
     def removing_file_previous_run(self):
@@ -56,13 +53,25 @@ class ATS_LoginPage():
     def enter_companyID(self):
         logging.info("Entering company's id")
         self.driver.find_element_by_xpath("//*[@id = '__input0-inner']").send_keys("incedotech")
-        time.sleep(8)
+        time.sleep(9)
         self.driver.find_element_by_xpath("//*[@id ='__button0-inner']/span").click()
-        time.sleep(2)
+        time.sleep(8)
 
     def send_credentials(self, usr, passw):
         logging.info("Passing credentials...")
         self.enter_companyID()
+        #time.sleep(15)
+        self.driver.find_element_by_xpath("//*[@name='loginfmt']").send_keys(usr)
+        self.driver.find_element_by_xpath("//*[@type='submit']").click()
+        time.sleep(6)
+        self.driver.find_element_by_xpath("//*[@id='passwordInput']").send_keys(passw)
+        self.driver.find_element_by_xpath("//*[@id='submitButton']").click()
+        time.sleep(2)
+        self.driver.find_element_by_xpath("//*[@id='idBtn_Back']").click()
+        time.sleep(8)
+
+
+        '''
         self.driver.find_element(by=LocatorsPage.txt_username[0], value=LocatorsPage.txt_username[1]).send_keys(usr)
         logging.info("Username entered")
         self.driver.find_element(by=LocatorsPage.txt_password[0], value=LocatorsPage.txt_password[1]).send_keys(passw)
@@ -70,6 +79,7 @@ class ATS_LoginPage():
         self.driver.find_element(by=LocatorsPage.button_login[0], value=LocatorsPage.button_login[1]).click()
         logging.info("Login in button clicked")
         time.sleep(8)
+        '''
 
     # def valid_login(self):
     #     with open('E:/End-to-End/UItest_Dashboard/tests/config.json') as data:

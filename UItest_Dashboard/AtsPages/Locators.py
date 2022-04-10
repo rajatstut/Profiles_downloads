@@ -8,3 +8,5 @@ class LocatorsPage():
     txt_username = (By.NAME, "username")
     txt_password = (By.NAME, "password")
     Btn_loginBtn = (By.ID, "login-submit")
+
+

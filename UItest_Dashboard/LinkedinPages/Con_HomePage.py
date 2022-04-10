@@ -29,14 +29,19 @@ class HomePage():
     def click_Jobs(self):
         logging.info("Clicking Jobs button")
         time.sleep(12)
-        self.driver.find_element_by_xpath("//*[@id= 'primary-navigation']/../ul/li[3]").click()
+        self.driver.find_element_by_xpath("//*[@class='global-nav__primary-link-text']/../../../li[3]").click()
 
     def click_My_Jobs(self):
         logging.info("Clicking My Jobs..")
         time.sleep(10)
-        self.driver.find_element_by_xpath("//*[@href = 'https://www.linkedin.com/my-items/saved-jobs/']/span[1]").click()
+        self.driver.find_element_by_xpath("//*[@href = 'https://www.linkedin.com/my-items/saved-jobs']/span[1]").click()
 
     def click_Posted_Jobs(self):
         logging.info("Clicking Posted Jobs..")
         time.sleep(8)
         self.driver.find_element_by_xpath("//a[@data-control-name='myitems_all_postedjobs']").click()
+
+    def click_closed_jobs(self):
+        logging.info("Clicking closed jobs..")
+        time.sleep(5)
+        self.driver.find_element_by_xpath("//*[@class='search-reusables__primary-filter'][3]/button").click()

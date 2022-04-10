@@ -26,11 +26,11 @@ class JobPage():
     def click_first_posted_job(self):
         logging.info("Clicking first job")
         time.sleep(5)
-        self.driver.find_element_by_xpath("//h3[contains(text(),'Posted Jobs')]/../ul/li").click()
+        self.driver.find_element_by_xpath("//*[contains(text(),'Posted Jobs')]/../ul/li").click()
 
     def click_ratings_Button(self):
         logging.info("Choosing Good fit option..")
-        time.sleep(6)
+        time.sleep(9)
         self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']").click()
         time.sleep(6)
         self.driver.find_element_by_xpath("//*[@data-control-name='rating_facet_toggle']/span/../..//li[1]").click()
@@ -85,7 +85,8 @@ class JobPage():
     def fetch_candidate_details(self):
         logging.info("Extracting candidates details ..")
         time.sleep(8)
-        self.driver.find_element_by_xpath("//h4/span[text()='Messaging']").click()
+        #self.driver.find_element_by_xpath("//h4/span[text()='Messaging']").click()
+        self.driver.find_element_by_xpath("//*[text()='Messaging']/../../../following-sibling::div/button[2]").click()
         candidate_dictionary = defaultdict(list)
         if self.driver.find_elements_by_xpath("//li[contains(@class,'artdeco-pagination__indicator')]"):
             pages = self.driver.find_elements_by_xpath("//li[contains(@class,'artdeco-pagination__indicator')]")
@@ -119,7 +120,8 @@ class JobPage():
                                 candidate_dictionary['Name'].append((emp_details_name[0])[:-2])
                                 candidate_dictionary['EmailId'].append(emp_details_email)
                                 candidate_dictionary['PhoneNumber'].append(emp_details_phone)
-                                time.sleep(3)
+                                #time.sleep(3)
+
                                 try:
                                     ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
                                     self.driver.find_element_by_xpath("//a[text()='Download']").click()
@@ -128,7 +130,7 @@ class JobPage():
                                     newfilename = cand_name[0]+"_"+cand_name[1]
                                     logging.info(newfilename)
                                     self.rename_filename_with_candidate(newfilename)
-                                except Exception as e:
+                                except Exception:
                                     ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]')).perform()
                                     self.driver.find_element_by_xpath('//a[contains(@class,"ui-attachment__download-button")]').click()
                                     self.wait_for_downloads()
@@ -172,13 +174,15 @@ class JobPage():
                     )
                     rate_as_validation_check = element.text
                     if "Good fit" in rate_as_validation_check:
+                    #if "Maybe" in rate_as_validation_check:
                         self.driver.find_element_by_xpath(
-                            "//*[@data-control-name='hiring_applicant_message']/../div[3]//span").click()
-                        time.sleep(3)
-                        emp_details_email = self.driver.find_element_by_xpath(
-                            "//div[@class='artdeco-dropdown__content-inner']/ul/li[2]/a/div/span[2]").text
-                        emp_details_phone = self.driver.find_element_by_xpath(
-                            " //div[@class='artdeco-dropdown__content-inner']/ul/li[3]/div/div/span[2]").text
+                            "//*[@class='hiring-applicant-header-actions']/div[3]//span").click()
+                        time.sleep(2)
+                        emp_details = self.driver.find_element_by_xpath(
+                            "//*[@class='hiring-applicant-header-actions']/div[3]/button/following-sibling::div").text
+                        emp_details = emp_details.split("\n")
+                        emp_details_email=emp_details[2]
+                        emp_details_phone = emp_details[5]
                         emp_details_name = self.driver.find_element_by_xpath(
                             "//*[@class='ph5 pt5 pb3 display-flex justify-space-between']//h1").text
                         emp_details_name = emp_details_name.split(" application")
@@ -187,15 +191,17 @@ class JobPage():
                         candidate_dictionary['PhoneNumber'].append(emp_details_phone)
                         time.sleep(3)
                         try:
+
                             ActionChains(self.driver).move_to_element(
                                 self.driver.find_element_by_xpath("//a[text()='Download']")).perform()
                             self.driver.find_element_by_xpath("//a[text()='Download']").click()
                             self.wait_for_downloads()
-                            cand_name = str(candidate_dictionary['Name'][index-1]).split(" ")                            
+                            cand_name = str(candidate_dictionary['Name'][index-1]).split(" ")
                             newfilename = cand_name[0]+"_"+cand_name[1]
                             logging.info(newfilename)
                             self.rename_filename_with_candidate(newfilename)
-                        except Exception as e:
+                        except Exception:
+
                             ActionChains(self.driver).move_to_element(self.driver.find_element_by_xpath(
                                 '//a[contains(@class,"ui-attachment__download-button")]')).perform()
                             self.driver.find_element_by_xpath(
